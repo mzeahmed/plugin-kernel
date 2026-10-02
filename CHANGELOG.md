@@ -8,6 +8,8 @@ tag Git ; `[Unreleased]` regroupe ce qui est commité mais pas encore tagué.
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-02
+
 ### Added
 
 - Outils de qualité en `require-dev` (php-cs-fixer, PHPStan + phpstan-wordpress, Rector), leur
