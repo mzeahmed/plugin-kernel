@@ -1,0 +1,36 @@
+{
+  "name": "mzeahmed/plugin-kernel",
+  "description": "Reusable module system + kernel for WordPress plugins: module discovery/activation, loader orchestration, DI bootstrap. Built incrementally.",
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://github.com/mzeahmed/plugin-kernel",
+  "authors": [
+    {
+      "name": "Ahmed Mze"
+    }
+  ],
+  "keywords": [
+    "wordpress",
+    "kernel",
+    "modules",
+    "plugin-framework"
+  ],
+  "autoload": {
+    "psr-4": {
+      "PluginKernel\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=8.3",
+    "firebase/php-jwt": "^7.1",
+    "symfony/config": "^7.4",
+    "symfony/dependency-injection": "^7.4",
+    "symfony/validator": "^7.4",
+    "symfony/yaml": "^7.4"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
