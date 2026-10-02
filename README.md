@@ -772,6 +772,10 @@ src/Modules/Challenge/Assets/blocks/challenge-collaboration/
   `index.js` + `.asset.php` (script éditeur), `index.css` (style éditeur), `style-index.css`
   (style front + éditeur). Un bloc non compilé reste enregistré (rendu conservé) mais n'apparaît
   pas dans l'éditeur.
+- **Catégorie commune** : passer `blockCategory: 'Mon Plugin'` au constructeur du `Kernel`
+  pour regrouper tous les blocs des modules dans une même catégorie de l'inserteur Gutenberg
+  (slug `sanitize_title()`, ici `mon-plugin`, placée en tête). Elle remplace la `category` des
+  `block.json` ; sans ce paramètre, chaque bloc garde la sienne.
 - **Rendu dynamique** : natif (`"render": "file:./render.php"` dans `block.json`) ou callback
   déclaré dans le `config.php` du module, résolu via le container au premier rendu :
 

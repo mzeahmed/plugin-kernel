@@ -8,6 +8,15 @@ tag Git ; `[Unreleased]` regroupe ce qui est commité mais pas encore tagué.
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-10-02
+
+### Added
+
+- `Kernel` : paramètre optionnel `blockCategory` (titre). `ModuleBlockLoader` crée alors une
+  catégorie d'inserteur Gutenberg (slug `sanitize_title()`, placée en tête) et y range tous les
+  blocs des modules, à la place de la `category` de leur `block.json`. Sans ce paramètre,
+  comportement inchangé.
+
 ## [0.2.1] - 2026-10-02
 
 ### Added

@@ -48,6 +48,9 @@ final class Kernel
     /**
      * @param array<string, mixed> $envParameters Paramètres exposés au container Symfony (%env(...)%)
      * @param string[] $watchedDirectories Répertoires surveillés en mode dev pour déclencher un rebuild du container
+     * @param string|null $blockCategory Titre de la catégorie d'inserteur regroupant tous les blocs
+     *                                   Gutenberg des modules (ex: 'Mon Plugin') ; null = catégorie de
+     *                                   chaque block.json (voir ModuleBlockLoader)
      */
     public function __construct(
         private readonly string $modulesPath,
@@ -69,6 +72,7 @@ final class Kernel
         private readonly array $watchedDirectories = [],
         private readonly ?\Closure $authorize = null,
         private readonly ?AsyncBootstrapperInterface $async = null,
+        private readonly ?string $blockCategory = null,
     ) {
     }
 
@@ -121,6 +125,7 @@ final class Kernel
             pluginUrl: $this->pluginUrl,
             textDomain: $this->textDomain,
             handlePrefix: $this->assetHandlePrefix,
+            blockCategory: $this->blockCategory,
         );
     }
 

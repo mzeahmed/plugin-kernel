@@ -28,17 +28,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * Un bloc non compilé reste enregistré (son rendu public est conservé) mais n'est pas
  * proposé dans l'éditeur, faute de script.
+ *
+ * Catégorie commune (optionnelle, paramètre `blockCategory` du Kernel) : si un titre est
+ * fourni (ex: 'Mon Plugin'), une catégorie d'inserteur est créée (slug sanitize_title(),
+ * placée en tête) et tous les blocs des modules y sont rangés, quelle que soit la
+ * `category` de leur block.json. Sans titre, chaque bloc garde sa propre catégorie.
  */
 final class ModuleBlockLoader
 {
     /**
-     * @var array{pluginPath: string, pluginUrl: string, textDomain: string, handlePrefix: string}
+     * @var array{pluginPath: string, pluginUrl: string, textDomain: string, handlePrefix: string, categorySlug: ?string}
      */
     private static array $config = [
         'pluginPath' => '',
         'pluginUrl' => '',
         'textDomain' => '',
         'handlePrefix' => 'module',
+        'categorySlug' => null,
     ];
 
     private static ?array $manifest = null;
@@ -52,6 +58,8 @@ final class ModuleBlockLoader
      * @param string $pluginUrl URL racine du plugin
      * @param string $textDomain Text domain pour wp_set_script_translations()
      * @param string $handlePrefix Préfixe des handles (ex: 'my-plugin-module')
+     * @param string|null $blockCategory Titre de la catégorie commune à tous les blocs des modules
+     *                                   (ex: 'Mon Plugin') ; null = catégorie de chaque block.json
      */
     public static function register(
         ModuleLoader $modules,
@@ -60,13 +68,25 @@ final class ModuleBlockLoader
         string $pluginUrl = '',
         string $textDomain = '',
         string $handlePrefix = 'module',
+        ?string $blockCategory = null,
     ): void {
+        $categoryTitle = null !== $blockCategory ? trim($blockCategory) : '';
+        $categorySlug = '' !== $categoryTitle ? sanitize_title($categoryTitle) : '';
+
         self::$config = [
             'pluginPath' => $pluginPath,
             'pluginUrl' => $pluginUrl,
             'textDomain' => $textDomain,
             'handlePrefix' => $handlePrefix,
+            'categorySlug' => '' !== $categorySlug ? $categorySlug : null,
         ];
+
+        if ('' !== $categorySlug) {
+            add_filter(
+                'block_categories_all',
+                static fn (array $categories): array => self::prependCategory($categories, $categorySlug, $categoryTitle)
+            );
+        }
 
         add_action('init', static function () use ($modules, $container): void {
             self::registerAll($modules, $container);
@@ -113,6 +133,10 @@ final class ModuleBlockLoader
         $baseKey = "modules/$module/blocks/$block";
         $handle = "$prefix-block-$block";
         $args = [];
+
+        if (null !== self::$config['categorySlug']) {
+            $args['category'] = self::$config['categorySlug'];
+        }
 
         $jsFile = self::buildFile("$baseKey/index.js");
         $assetFile = self::buildFile("$baseKey/index.php");
@@ -181,6 +205,24 @@ final class ModuleBlockLoader
         }
 
         throw new \InvalidArgumentException(\sprintf('Callback de rendu de bloc invalide : %s', print_r($callback, true)));
+    }
+
+    /**
+     * Ajoute la catégorie commune en tête de l'inserteur (sans doublon si elle existe déjà).
+     *
+     * @param array<int, array<string, mixed>> $categories
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private static function prependCategory(array $categories, string $slug, string $title): array
+    {
+        foreach ($categories as $category) {
+            if (($category['slug'] ?? null) === $slug) {
+                return $categories;
+            }
+        }
+
+        return [['slug' => $slug, 'title' => $title, 'icon' => null], ...$categories];
     }
 
     private static function buildFile(string $key): ?string
