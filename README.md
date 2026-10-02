@@ -40,6 +40,7 @@ métier, la base de données, ou le framework de templating utilisé.
 - [Validation](#validation)
 - [Contrats à implémenter (récapitulatif)](#contrats-à-implémenter-récapitulatif)
 - [Pièges connus](#pièges-connus-à-lire-avant-détendre-ce-package)
+- [Développement](#développement)
 
 Voir aussi : [CHANGELOG.md](CHANGELOG.md) (historique des versions) et
 [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (dépannage par symptôme).
@@ -970,3 +971,15 @@ de nonce, câblage async) sont propres à chaque application.
    de callable de première classe (`$obj->method(...)`), les deux sont acceptées.
 6. **Un callable nullable ne peut pas s'invoquer via l'opérateur nullsafe** (`$cb?->($arg)` est une
    erreur de syntaxe) — utiliser `if (null !== $cb) { $cb($arg); }` (voir `AsyncKernel`).
+
+## Développement
+
+```bash
+make install   # dépendances, dont les outils de qualité (require-dev)
+make lint      # php-cs-fixer en mode vérification (lintf : avec correction)
+make rector    # Rector en dry-run (rectorf : applique les transformations)
+make stan      # PHPStan (niveau 3, extension phpstan-wordpress)
+```
+
+`make` (ou `make help`) liste toutes les commandes. Configuration : `.php-cs-fixer.php`,
+`rector.php`, `phpstan.neon`.

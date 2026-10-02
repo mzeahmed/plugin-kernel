@@ -6,6 +6,11 @@ namespace PluginKernel\Http\Response;
 
 /**
  * Classe standardisée pour les réponses AJAX.
+ *
+ * Les sous-classes doivent garder un constructeur compatible : success()/error()
+ * instancient via `new static()`.
+ *
+ * @phpstan-consistent-constructor
  */
 class AjaxResponse
 {

@@ -356,7 +356,8 @@ class BaseRouter
                 $wp_query->is_page = true;
                 $wp_query->is_singular = true;
                 $wp_query->is_home = false;
-                $wp_query->is_front_page = false;
+                // Pas d'affectation `is_front_page` : WP_Query n'a pas de propriété de ce nom
+                // (seulement la méthode is_front_page(), calculée depuis is_home/is_page).
 
                 // Stocker le nom de la route pour le titre
                 global $plugin_kernel_virtual_page_title;

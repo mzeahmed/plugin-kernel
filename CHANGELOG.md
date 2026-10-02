@@ -8,6 +8,19 @@ tag Git ; `[Unreleased]` regroupe ce qui est commité mais pas encore tagué.
 
 ## [Unreleased]
 
+### Added
+
+- Outils de qualité en `require-dev` (php-cs-fixer, PHPStan + phpstan-wordpress, Rector), leur
+  configuration (`.php-cs-fixer.php`, `phpstan.neon`, `rector.php`) et un `Makefile`
+  (`help`, `install`, `lint`/`lintf`, `rector`/`rectorf`, `stan`).
+
+### Fixed
+
+- `BaseRouter` : suppression de l'affectation `$wp_query->is_front_page = false`, sans effet
+  (`WP_Query` n'a pas de propriété de ce nom, seulement la méthode `is_front_page()`).
+- `AjaxResponse` : annotation `@phpstan-consistent-constructor`, qui documente que les
+  sous-classes doivent garder un constructeur compatible avec `new static()`.
+
 ## [0.2.0] - 2026-10-02
 
 Première version publique.

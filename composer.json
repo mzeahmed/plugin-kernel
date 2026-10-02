@@ -28,6 +28,16 @@
     "symfony/validator": "^7.4",
     "symfony/yaml": "^7.4"
   },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.95",
+    "phpstan/phpstan": "^2.2",
+    "rector/rector": "^2.6",
+    "szepeviktor/phpstan-wordpress": "^2.0"
+  },
+  "scripts": {
+    "lint": "php-cs-fixer fix --dry-run --diff",
+    "lint:fix": "php-cs-fixer fix --diff"
+  },
   "config": {
     "sort-packages": true
   },
