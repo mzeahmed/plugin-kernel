@@ -13,6 +13,14 @@ tag Git ; `[Unreleased]` regroupe ce qui est commité mais pas encore tagué.
 - Outils de qualité en `require-dev` (php-cs-fixer, PHPStan + phpstan-wordpress, Rector), leur
   configuration (`.php-cs-fixer.php`, `phpstan.neon`, `rector.php`) et un `Makefile`
   (`help`, `install`, `lint`/`lintf`, `rector`/`rectorf`, `stan`).
+- Règles php-cs-fixer custom (`tools/CsFixer/`) : `PluginKernel/split_method_attribute_args`
+  (un argument par ligne sur les attributs de méthode à 2+ arguments) et
+  `PluginKernel/blank_line_after_control_structure`.
+
+### Changed
+
+- Mise en forme selon `PluginKernel/blank_line_after_control_structure` (ligne vide après un
+  bloc de contrôle) dans `HookRouter` et `ModuleLoader`, sans changement de comportement.
 
 ### Fixed
 

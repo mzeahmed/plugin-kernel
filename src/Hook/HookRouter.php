@@ -52,6 +52,7 @@ readonly class HookRouter
             if (\is_callable($instance)) {
                 return $instance;
             }
+
             throw new \RuntimeException(\sprintf('Class %s is not callable (no __invoke method).', $callback));
         }
 

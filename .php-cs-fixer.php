@@ -12,14 +12,23 @@ declare(strict_types=1);
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
+use PluginKernelTools\CsFixer\SplitMethodAttributeArgsFixer;
+use PluginKernelTools\CsFixer\BlankLineAfterControlStructureFixer;
+
+require __DIR__ . '/tools/CsFixer/SplitMethodAttributeArgsFixer.php';
+require __DIR__ . '/tools/CsFixer/BlankLineAfterControlStructureFixer.php';
 
 $finder = Finder::create()
-                ->in(__DIR__ . '/src')
+                ->in([__DIR__ . '/src', __DIR__ . '/tools'])
                 ->append([__DIR__ . '/rector.php', __DIR__ . '/.php-cs-fixer.php'])
                 ->ignoreDotFiles(true)
                 ->ignoreVCS(true);
 
 return (new Config())
+    ->registerCustomFixers([
+        new SplitMethodAttributeArgsFixer(),
+        new BlankLineAfterControlStructureFixer(),
+    ])
     ->setRules([
         // PSR-12 + imports inutilisés supprimés
         '@PSR12' => true,
@@ -77,6 +86,9 @@ return (new Config())
             'format' => 'short',
         ],
 
+        // Règles custom (tools/CsFixer)
+        'PluginKernel/split_method_attribute_args' => true,
+        'PluginKernel/blank_line_after_control_structure' => true,
     ])
     ->setRiskyAllowed(true)
     ->setUsingCache(true)

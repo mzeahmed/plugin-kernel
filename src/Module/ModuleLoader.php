@@ -175,6 +175,7 @@ class ModuleLoader implements ModuleLoaderInterface
         if (!isset($this->enabledModules[$moduleName])) {
             return false;
         }
+
         $module = $this->enabledModules[$moduleName];
 
         return \is_array($module) && (bool) ($module['enabled'] ?? false);
