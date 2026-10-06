@@ -8,6 +8,18 @@ tag Git ; `[Unreleased]` regroupe ce qui est commité mais pas encore tagué.
 
 ## [Unreleased]
 
+### Changed
+
+- Outils de qualité : Rector passe en `^2.7` (PHPStan 2.3 requis, déjà permis par `^2.2`), et
+  `rector.php` charge les stubs WordPress (`withBootstrapFiles()`). `make rector` propose
+  désormais les mêmes transformations ici qu'à la racine du monorepo. Sans changement de
+  comportement.
+- Transformations Rector appliquées, sans changement de comportement :
+  - `CronRouter` : suppression des casts redondants sur les événements, déjà typés par
+    `CronCollection::event()`, seul point d'entrée de la collection ;
+  - `RestRouteLoader` : la `permission_callback` par défaut devient `is_user_logged_in(...)`
+    au lieu de `static fn () => is_user_logged_in()`.
+
 ## [0.2.2] - 2026-10-02
 
 ### Added

@@ -51,11 +51,11 @@ readonly class CronRouter
         // 3) Schedule events if not already scheduled (on init)
         add_action('init', function () use ($crons) {
             foreach ($crons->events() as $event) {
-                $hook = (string) ($event['hook'] ?? '');
-                $recurrence = (string) ($event['recurrence'] ?? 'hourly');
-                $args = (array) ($event['args'] ?? []);
+                $hook = $event['hook'] ?? '';
+                $recurrence = $event['recurrence'] ?? 'hourly';
+                $args = $event['args'] ?? [];
                 $startAt = $event['startAt'] ?? null;
-                $single = (bool) ($event['single'] ?? false);
+                $single = $event['single'] ?? false;
                 if (!$hook) {
                     continue;
                 }

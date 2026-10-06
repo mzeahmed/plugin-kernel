@@ -277,7 +277,7 @@ class RestRouteLoader implements ModuleLoaderInterface
         }
 
         // Fallback: logged_in
-        return static fn () => is_user_logged_in();
+        return is_user_logged_in(...);
     }
 
     /**
