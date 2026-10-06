@@ -6,7 +6,7 @@ Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 adhère au [Semantic Versioning](https://semver.org/lang/fr/). Chaque version correspond à un
 tag Git ; `[Unreleased]` regroupe ce qui est commité mais pas encore tagué.
 
-## [Unreleased]
+## [0.2.3] - 2026-10-06
 
 ### Changed
 
