@@ -82,7 +82,16 @@ class RestRouteLoader implements ModuleLoaderInterface
                     $namespace = $attr->namespace ?? $this->defaultNamespace;
                     $path = $attr->path ?? $this->autoPath($refClass, $method);
                     $methods = $this->normalizeMethods($attr->methods);
-                    $permission = $this->resolvePermissionCallback($attr->permission, $container);
+
+                    // Une permission invalide ne doit faire tomber que sa propre route, jamais
+                    // tout le chargement : la route est ignorée (donc jamais exposée) et signalée.
+                    try {
+                        $permission = $this->resolvePermissionCallback($attr->permission, $container);
+                    } catch (\LogicException $e) {
+                        error_log('[PluginKernel] Route REST ignorée ' . $class . '::' . $method->getName() . ' - ' . $e->getMessage());
+
+                        continue;
+                    }
 
                     // Enregistre les routes publiques (utile pour un éventuel service de garde périmètre)
                     if ('public' === $attr->permission || null === $attr->permission) {
@@ -268,7 +277,13 @@ class RestRouteLoader implements ModuleLoaderInterface
             };
 
             if (null !== $instance) {
-                return [$instance, $method];
+                $callback = [$instance, $method];
+
+                if (!\is_callable($callback)) {
+                    throw new \LogicException(\sprintf('permission [%s, \'%s\'] : méthode inexistante ou non publique.', $class, $method));
+                }
+
+                return $callback;
             }
         }
 

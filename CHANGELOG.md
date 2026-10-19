@@ -6,6 +6,15 @@ Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 adhère au [Semantic Versioning](https://semver.org/lang/fr/). Chaque version correspond à un
 tag Git ; `[Unreleased]` regroupe ce qui est commité mais pas encore tagué.
 
+## [0.2.4] - 2026-10-19
+
+### Fixed
+
+- `RestRouteLoader` : une `permission: [Classe, 'methode']` invalide (méthode inexistante ou
+  non publique) n'interrompt plus le chargement de toutes les routes. La route fautive est
+  ignorée (jamais exposée) et signalée dans le log `[PluginKernel] Route REST ignorée …`. Elle
+  provoquait auparavant une `TypeError` qui laissait le plugin sans aucune route REST.
+
 ## [0.2.3] - 2026-10-06
 
 ### Changed
