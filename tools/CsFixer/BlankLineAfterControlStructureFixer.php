@@ -42,13 +42,7 @@ final class BlankLineAfterControlStructureFixer extends AbstractFixer implements
 
     public function isCandidate(Tokens $tokens): bool
     {
-        foreach (self::CONTROL_TOKENS as $kind) {
-            if ($tokens->isTokenKindFound($kind)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any(self::CONTROL_TOKENS, fn ($kind) => $tokens->isTokenKindFound($kind));
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void

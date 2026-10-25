@@ -70,7 +70,7 @@ final readonly class CronLoader implements ModuleLoaderInterface
         }
 
         if ($container instanceof ContainerInterface) {
-            (new CronRouter($container))->register($crons);
+            new CronRouter($container)->register($crons);
         }
 
         return true;

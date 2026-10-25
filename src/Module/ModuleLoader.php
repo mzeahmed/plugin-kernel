@@ -130,7 +130,7 @@ class ModuleLoader implements ModuleLoaderInterface
         }
 
         // Après collecte, on enregistre tous les hooks dans WordPress via HookRouter
-        (new HookRouter($container))->register($hooks);
+        new HookRouter($container)->register($hooks);
 
         // Ne câble que les listeners des modules de CETTE source : $this->enabledModules contient
         // aussi les sources précédemment chargées, dont les listeners sont déjà câblés (sinon un

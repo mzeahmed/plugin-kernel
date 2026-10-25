@@ -118,7 +118,7 @@ class Route
         // Controller@method
         if (\is_string($action) && str_contains($action, '@')) {
             [$class, $method] = explode('@', $action, 2);
-            $callback = fn ($vars) => (new $class())->$method($vars);
+            $callback = fn ($vars) => new $class()->$method($vars);
 
             return self::$router->virtual($uri, '', $callback, $constraints);
         }
