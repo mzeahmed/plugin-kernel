@@ -100,7 +100,7 @@ class RestRouteLoader implements ModuleLoaderInterface
 
                     // Lazy instantiation: le contrôleur n'est créé que si la route est appelée
                     $methodName = $method->getName();
-                    $lazyCallback = (fn(): mixed => $this->instantiate($class, $container)->$methodName(...\func_get_args()));
+                    $lazyCallback = (fn (): mixed => $this->instantiate($class, $container)->$methodName(...\func_get_args()));
 
                     if (\is_array($methods)) {
                         foreach ($methods as $m) {
