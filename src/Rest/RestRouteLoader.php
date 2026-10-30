@@ -43,10 +43,10 @@ class RestRouteLoader implements ModuleLoaderInterface
     ) {
     }
 
-    public function load(string $controllersPath, string $baseNamespace, ?ContainerInterface $container = null): mixed
+    public function load(string $modulesPath, string $modulesNamespace, ?ContainerInterface $container = null): mixed
     {
         $entries = [];
-        $finder = new GlobFinder($controllersPath . '/*/Controller/Rest/*.php', true);
+        $finder = new GlobFinder($modulesPath . '/*/Controller/Rest/*.php', true);
 
         $files = $finder->find();
 
@@ -61,7 +61,7 @@ class RestRouteLoader implements ModuleLoaderInterface
                 }
             }
 
-            $class = $this->fileToClass($file, $controllersPath, $baseNamespace);
+            $class = $this->fileToClass($file, $modulesPath, $modulesNamespace);
 
             if (!class_exists($class)) {
                 continue;
@@ -100,11 +100,7 @@ class RestRouteLoader implements ModuleLoaderInterface
 
                     // Lazy instantiation: le contrôleur n'est créé que si la route est appelée
                     $methodName = $method->getName();
-                    $lazyCallback = function () use ($class, $methodName, $container): mixed {
-                        $instance = $this->instantiate($class, $container);
-
-                        return $instance->$methodName(...\func_get_args());
-                    };
+                    $lazyCallback = (fn(): mixed => $this->instantiate($class, $container)->$methodName(...\func_get_args()));
 
                     if (\is_array($methods)) {
                         foreach ($methods as $m) {
@@ -164,6 +160,9 @@ class RestRouteLoader implements ModuleLoaderInterface
         return $parts[$controllerIndex - 1];
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     private function instantiate(string $class, ?ContainerInterface $container = null): object
     {
         if ($container && $container->has($class)) {
