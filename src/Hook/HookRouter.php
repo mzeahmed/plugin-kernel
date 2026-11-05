@@ -19,21 +19,21 @@ readonly class HookRouter
     public function register(HookCollection $hooks): void
     {
         foreach ($hooks->actions() as $item) {
-            add_action($item['hook'], $this->resolveCallback($item['callback']), $item['priority'], $item['args']);
+            add_action($item['hook'], $this->deferredCallback($item['callback']), $item['priority'], $item['args']);
         }
 
         foreach ($hooks->filters() as $item) {
-            add_filter($item['hook'], $this->resolveCallback($item['callback']), $item['priority'], $item['args']);
+            add_filter($item['hook'], $this->deferredCallback($item['callback']), $item['priority'], $item['args']);
         }
 
-        add_action('init', function () use ($hooks): void {
-            foreach ($hooks->shortcodes() as $item) {
-                add_shortcode(
-                    sanitize_key($item['tag']),
-                    $this->resolveCallback($item['callback']),
-                );
-            }
-        }, 1);
+        foreach ($hooks->shortcodes() as $item) {
+            add_shortcode(sanitize_key($item['tag']), $this->deferredCallback($item['callback']));
+        }
+    }
+
+    private function deferredCallback(mixed $callback): \Closure
+    {
+        return fn (mixed ...$arguments): mixed => ($this->resolveCallback($callback))(...$arguments);
     }
 
     private function resolveCallback(mixed $callback): callable
