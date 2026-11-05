@@ -26,9 +26,14 @@ readonly class HookRouter
             add_filter($item['hook'], $this->resolveCallback($item['callback']), $item['priority'], $item['args']);
         }
 
-        foreach ($hooks->shortcodes() as $item) {
-            add_shortcode(sanitize_key($item['tag']), $this->resolveCallback($item['callback']));
-        }
+        add_action('init', function () use ($hooks): void {
+            foreach ($hooks->shortcodes() as $item) {
+                add_shortcode(
+                    sanitize_key($item['tag']),
+                    $this->resolveCallback($item['callback']),
+                );
+            }
+        }, 1);
     }
 
     private function resolveCallback(mixed $callback): callable
