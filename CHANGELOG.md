@@ -6,6 +6,14 @@ Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 adhère au [Semantic Versioning](https://semver.org/lang/fr/). Chaque version correspond à un
 tag Git ; `[Unreleased]` regroupe ce qui est commité mais pas encore tagué.
 
+## [0.2.8] - 2026-11-05
+
+### Fixed
+
+- `HookRouter` : les callbacks d’actions, filtres et shortcodes sont désormais résolus à leur
+  exécution plutôt qu’au bootstrap. Un service impossible à instancier ne bloque donc plus
+  l’enregistrement des autres hooks, notamment des shortcodes des modules.
+
 ## [0.2.4] - 2026-10-19
 
 ### Fixed
