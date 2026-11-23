@@ -6,6 +6,16 @@ Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 adhère au [Semantic Versioning](https://semver.org/lang/fr/). Chaque version correspond à un
 tag Git ; `[Unreleased]` regroupe ce qui est commité mais pas encore tagué.
 
+## [0.2.9] - 2026-11-23
+
+### Fixed
+
+- `BaseRouter::prevent404ForRoutes()` : une route virtuelle n'est plus marquée `is_page` /
+  `is_singular`. Sans article derrière, WordPress (`body_class()`) et les extensions SEO
+  (Rank Math : Open Graph, JSON-LD) lisaient les propriétés d'un objet null et émettaient
+  une vingtaine d'avertissements PHP par page. Conséquence : `is_page()` et `is_singular()`
+  renvoient désormais `false` sur une route virtuelle.
+
 ## [0.2.8] - 2026-11-05
 
 ### Fixed

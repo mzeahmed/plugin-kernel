@@ -353,8 +353,13 @@ class BaseRouter
         foreach ($this->routes as $route) {
             if ($route->isVirtual() && $this->matchesRoute($route, $currentUrl)) {
                 $wp_query->is_404 = false;
-                $wp_query->is_page = true;
-                $wp_query->is_singular = true;
+                // Aucun article derrière une route virtuelle : la déclarer « page » ou
+                // « singulier » fait lire un objet null à WordPress (body_class) et aux
+                // extensions SEO (Rank Math : Open Graph, JSON-LD) → avertissements PHP.
+                // Mis à false explicitement : WordPress a pu les passer à true en
+                // analysant la requête (pagename).
+                $wp_query->is_page = false;
+                $wp_query->is_singular = false;
                 $wp_query->is_home = false;
                 // Pas d'affectation `is_front_page` : WP_Query n'a pas de propriété de ce nom
                 // (seulement la méthode is_front_page(), calculée depuis is_home/is_page).
