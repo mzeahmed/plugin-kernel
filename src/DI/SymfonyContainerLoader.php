@@ -113,11 +113,21 @@ class SymfonyContainerLoader
             ]);
 
             $dir = \dirname($cachePath);
-            if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
+            // Plusieurs requêtes peuvent reconstruire le conteneur en même temps (cache vidé au
+            // déploiement) : mkdir() d'un dossier déjà créé par une autre n'est pas une erreur.
+            if (!is_dir($dir) && !@mkdir($dir, 0755, true) && !is_dir($dir)) {
                 throw new \RuntimeException("Unable to create cache directory: {$dir}");
             }
 
-            file_put_contents($cachePath, $php);
+            // Écriture atomique (fichier temporaire puis rename) : une requête concurrente ne doit
+            // jamais charger un fichier à moitié écrit (erreur de syntaxe, classe introuvable).
+            $tmpPath = $cachePath . '.' . bin2hex(random_bytes(6)) . '.tmp';
+
+            if (false === file_put_contents($tmpPath, $php) || !rename($tmpPath, $cachePath)) {
+                @unlink($tmpPath);
+
+                throw new \RuntimeException("Impossible d'écrire le cache du conteneur : {$cachePath}");
+            }
         } catch (\Throwable $e) {
             throw new \RuntimeException('Impossible de dumper le conteneur Symfony : ' . $e->getMessage());
         }

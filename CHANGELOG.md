@@ -6,6 +6,15 @@ Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 adhère au [Semantic Versioning](https://semver.org/lang/fr/). Chaque version correspond à un
 tag Git ; `[Unreleased]` regroupe ce qui est commité mais pas encore tagué.
 
+## [0.2.10] - 2026-11-23
+
+### Fixed
+
+- `SymfonyContainerLoader` : le cache du conteneur est écrit de façon atomique (fichier
+  temporaire puis `rename()`). Après un déploiement, plusieurs requêtes simultanées le
+  reconstruisaient en même temps et l'une pouvait charger un fichier à moitié écrit (erreur de
+  syntaxe, erreur fatale). Plus d'avertissement `mkdir(): File exists` dans ce cas.
+
 ## [0.2.9] - 2026-11-23
 
 ### Fixed
